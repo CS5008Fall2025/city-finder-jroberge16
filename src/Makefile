@@ -1,10 +1,10 @@
 CC = gcc   # This variable is which compiler to use, we will use the variable later by $(CC)
 CFLAGS = -Wall  # this variable is command line arguments
-CFILES =  # this variable is the list of files to compile - UPDATE THIS LINE with your files
+CFILES = adj_list.c main.c utils.c  # this variable is the list of all the .c files to compile
 
-all: myprogram  #runs target myprogram is nothing is passed into make
+all: main #runs target myprogram is nothing is passed into make
 
-myprogram: # it needs to compile out to >>>map.out<<<!
+main: # it needs to compile out to >>>map.out<<<!
 	$(CC) $(CFLAGS) -o map.out $(CFILES)  
 	
 
