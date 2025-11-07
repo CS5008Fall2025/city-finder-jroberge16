@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "dijkstra.h": "c",
+        "stdbool.h": "c",
+        "stdio.h": "c"
+    }
+}

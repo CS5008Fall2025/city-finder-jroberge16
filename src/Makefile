@@ -1,6 +1,6 @@
 CC = gcc   # This variable is which compiler to use, we will use the variable later by $(CC)
 CFLAGS = -Wall  # this variable is command line arguments
-CFILES = adj_list.c main.c utils.c  # this variable is the list of all the .c files to compile
+CFILES = adj_list.c main.c utils.c debug.c GraphReader.c # this variable is the list of all the .c files to compile
 
 all: main #runs target myprogram is nothing is passed into make
 

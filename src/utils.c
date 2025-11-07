@@ -1,10 +1,18 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+
+#include "debug.h"
+
+
+
 
 /**
  * This displays the help menu
  * TODO: Add default starting file
  */
-void helper(void){
+void helper(char *folder_path_edges, char *folder_path_nodes){
     printf(
         "\n=====================================================================\n"
         "=====\t\t\t 🏢   City Finder 🏢 \t\t\t=====\n"
@@ -12,13 +20,33 @@ void helper(void){
         "Welcome to the City Finder application. This application is designed \nto find you the shortest path between two cities.\n"
         "\n"
         "Select a Number:\n"
-        "\t1. Change City Information (Default)\n"
-        "\t2. Find the Shortest Path\n"
-        "\t3. Exit Application\n\n"
-        "\n\nℹ️   add -d [1,2,3] to enter debug mode for printing extra information \n"
-        "Example: '2 -d 3' enters you in debug mode level 3 for find Shortest path\n"
-        "PLEASE MAKE A SELECTION:"
+        "\t1. Find the Shortest Path\n"
+        "\t2. Exit Application\n\n"
+        "\n ℹ️   Current Files: {'Edges': '%s', 'Nodes': '%s'}"
+        "\n ℹ️   comandline breakdown: map.out <vertices> <edges> <debug level([0-4])>\n"
+        "\nPLEASE MAKE A SELECTION [1,2]: ", folder_path_edges, folder_path_nodes
     );
 }
 
+
+void process_command_line_args(int argc, char *argv[], char *folder_path_edges, char *folder_path_nodes){
+
+    if(argc > 1) {
+        strcpy(folder_path_edges, argv[1]);
+    }
+    if(argc > 2) {
+        strcpy(folder_path_nodes, argv[2]);
+    }
+    if(argc > 3) {
+        set_debug_level(atoi(argv[3]));
+    }else{
+        set_debug_level(3);
+    }
+}
+
+
+void shortest_path_menu(char *folder_path_edges, char *folder_path_nodes){
+    printf("Select the two cities which you would like to find the shortest path for:");
+
+}
 
