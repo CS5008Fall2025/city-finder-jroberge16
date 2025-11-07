@@ -22,20 +22,19 @@ void helper(char *folder_path_edges, char *folder_path_nodes){
         "Select a Number:\n"
         "\t1. Find the Shortest Path\n"
         "\t2. Exit Application\n\n"
-        "\n ℹ️   Current Files: {'Edges': '%s', 'Nodes': '%s'}"
+        "\n ℹ️   Current Files: {'Nodes': '%s', 'Edges': '%s'}"
         "\n ℹ️   comandline breakdown: map.out <vertices> <edges> <debug level([0-4])>\n"
-        "\nPLEASE MAKE A SELECTION [1,2]: ", folder_path_edges, folder_path_nodes
+        "\nPLEASE MAKE A SELECTION:", folder_path_nodes, folder_path_edges
     );
 }
 
 
 void process_command_line_args(int argc, char *argv[], char *folder_path_edges, char *folder_path_nodes){
-
     if(argc > 1) {
-        strcpy(folder_path_edges, argv[1]);
+        strncpy(argv[1], folder_path_edges, sizeof(argv[1]) - 1);
     }
     if(argc > 2) {
-        strcpy(folder_path_nodes, argv[2]);
+        strncpy(argv[2], folder_path_edges, sizeof(argv[2]) - 1);
     }
     if(argc > 3) {
         set_debug_level(atoi(argv[3]));
@@ -45,8 +44,4 @@ void process_command_line_args(int argc, char *argv[], char *folder_path_edges, 
 }
 
 
-void shortest_path_menu(char *folder_path_edges, char *folder_path_nodes){
-    printf("Select the two cities which you would like to find the shortest path for:");
-
-}
 

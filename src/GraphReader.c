@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "NeuHashtable.h"
 #include "GraphReader.h"
 
 
@@ -90,6 +91,13 @@ int* reader_next(GraphReader* reader) {
     return reader->currentLine;
 }
 
+
+
+
+
+
+
+
 /**
 * reader_close - closes the GraphReader and frees allocated memory
 * This function should be called when done with the GraphReader
@@ -107,4 +115,31 @@ void reader_close(GraphReader* reader) {
         }
         free(reader);
     }
+}
+
+
+NeuHashtable* read_vertices(const char* file_name){
+    FILE *file;
+    char line[256]; 
+    int index = 0;
+
+    NeuHashtable* hashtable = create_hashtable(25);
+
+    file = fopen(file_name, "r");
+    if (file == NULL){
+        printf("❌ Invalid File");
+        return NULL;
+    }
+    
+    while(fgets(line, sizeof(line), file)) {
+        line[strcspn(line, "\r\n")] = '\0';
+        
+        if (strlen(line) == 0) {
+            continue;
+        }
+        add_item(hashtable, line, index);
+        index++;
+    }
+    fclose(file);
+    return hashtable;
 }
