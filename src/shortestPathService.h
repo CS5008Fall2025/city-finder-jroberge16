@@ -8,6 +8,6 @@
 
 
 void shortest_path_menu(char *folder_path_edges, char *folder_path_nodes);
-
+void shorttest_path_service(char *folder_path_edges, char *folder_path_nodes);
 
 #endif

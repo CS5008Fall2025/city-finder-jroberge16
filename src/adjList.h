@@ -12,6 +12,7 @@
 typedef struct node_t {
     int vertex;
     int weight;
+    char name[25];
     struct node_t* next;
 } AdjListNode;
 
@@ -28,7 +29,7 @@ typedef struct {
 AdjListGraph* createGraph(int capacity, bool directed); 
 void freeGraph(AdjListGraph* graph);
 
-void addEdge(AdjListGraph* graph, int src, int dest, int weight);
+void addEdge(AdjListGraph* graph, int src, int dest, int weight, char* name);
 int getDegree(AdjListGraph* graph, int vertex);
 int* getNeighbors(AdjListGraph* graph, int vertex);
 int getWeight(AdjListGraph* graph, int src, int dest);

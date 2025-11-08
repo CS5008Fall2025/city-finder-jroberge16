@@ -95,7 +95,7 @@ void __resizeGraph(AdjListGraph* graph) {
  * @param dest The destination vertex.
  * @param weight The weight of the edge.
  */
-void addEdge(AdjListGraph* graph, int src, int dest, int weight) {
+void addEdge(AdjListGraph* graph, int src, int dest, int weight, char* name) {
     if (src < 0  ||  dest < 0 ) {
         fprintf(stderr, "Vertex index out of bounds.\n");
         return;
@@ -113,6 +113,7 @@ void addEdge(AdjListGraph* graph, int src, int dest, int weight) {
     }
     newNode->vertex = dest;
     newNode->weight = weight;
+    strcpy(newNode->name, name);
     newNode->next = graph->adjList[src];
     graph->adjList[src] = newNode;
 
@@ -220,39 +221,6 @@ void printGraph(AdjListGraph* graph) {
     }
 }
 
-/**
- * Loads a graph from a file.
- * @param graph A pointer to the AdjListGraph.
- * @param filename The name of the file to load from.
- */
-// void loadFromFile(AdjListGraph* graph, const char* filename, NeuHashtable* hashtable) {
-//     GraphReader* reader = reader_open(filename);
-//     if (reader == NULL) {
-//         fprintf(stderr, "Failed to open file: %s\n", filename);
-//         return;
-//     }
-
-//     int* line;
-//     while ((line = reader_next(reader)) != NULL) {
-//         Item* src_item = get_item(hashtable, line[0]);
-//         Item* dest_item = get_item(hashtable, line[1]);
-
-//         if (src_item == NULL || dest_item == NULL) {
-//             printf("❌ Vertex not found in hastable");
-//             continue;
-//         }
-        
-//         int src = src_item->vertextIndex;
-//         int dest = dest_item->vertextIndex;
-
-//         int weight = line[2];
-//         DEBUG_PRINT(DEBUG_INFO, "Adding edge from %d to %d with weight %d\n", src, dest, weight);
-//         addEdge(graph, src, dest, weight);
-//     }
-//     reader_close(reader);
-// }
-
-
 
 void loadFromFile(AdjListGraph* graph, const char* filename, NeuHashtable* hashtable) {
     FILE *file = fopen(filename, "r");
@@ -279,8 +247,8 @@ void loadFromFile(AdjListGraph* graph, const char* filename, NeuHashtable* hasht
 
             if (src_item!=NULL && dest_item!=NULL) {
                 printf("addding edge from %s (%d) to %s (%d) with weight %d\n", src, src_item->vertextIndex, dest, dest_item->vertextIndex, value);
-                addEdge(graph, src_item->vertextIndex, dest_item->vertextIndex, value);
-                addEdge(graph, dest_item->vertextIndex, src_item->vertextIndex, value);
+                addEdge(graph, src_item->vertextIndex, dest_item->vertextIndex, value, src);
+                addEdge(graph, dest_item->vertextIndex, src_item->vertextIndex, value, dest);
                 continue;
             }else{
                 
