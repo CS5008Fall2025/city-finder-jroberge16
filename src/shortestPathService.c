@@ -47,14 +47,13 @@ int __proccess_city_selection(NeuHashtable* hashtable, char* src, char* dest){
 
 
 void shorttest_path_service(char *folder_path_edges, char *folder_path_nodes){
-    NeuHashtable* hashtable;
+    NeuHashtable* hashtable = read_vertices(folder_path_nodes);
     char src[10];
     char dest[10];
     int city_checker = 1;
 
     while(city_checker){
         printf("\n\n🏢   From the list below, please select two cities\n");
-        hashtable = read_vertices(folder_path_nodes);
         print_keys(hashtable);
         
         printf("Please select Two Cities, Example: city1 city2\n\n");
@@ -65,41 +64,21 @@ void shorttest_path_service(char *folder_path_edges, char *folder_path_nodes){
     }
 
     // substantiate graph
-    AdjListGraph * graph = createGraph(hashtable->size, true);
-    loadFromFile(graph, folder_path_edges, hashtable);
-
+    print_keys(hashtable);
+    AdjListGraph * graph = createGraph(hashtable, false);
+    loadFromFile(graph, folder_path_edges);
     printGraph(graph);
     
-    // // find the shortest paths
+    // find the shortest paths
     int dist[graph->numVertices];
     int prev[graph->numVertices];
     
-
-
     dijkstra(graph, get_item(hashtable, src)->vertextIndex, dist, prev);
-    printAllSolutions(dist, prev, graph->numVertices);
+    printAllSolutions(dist, prev, graph);
 
-    // Print initial arrays (before dijkstra)
-    printf("\nInitial dist array:\n");
-    for (int i = 0; i < graph->numVertices; i++) {
-        printf("dist[%d] = %d\n", i, dist[i]);
-    }
+
+    printTheShortestPath(src, dest, dist, prev, graph);
     
-    printf("\nInitial prev array:\n");
-    for (int i = 0; i < graph->numVertices; i++) {
-        printf("prev[%d] = %d\n", i, prev[i]);
-    }
-
-
-
-
-    // for (int i = 0; i < graph->numVertices; i++) {
-    //     printf("Distance from %s to vertex %d is %d\n", src, i, dist[i]);
-    // }
-
-    // printTheShortestPath(src, dest, dist, prev, graph->numVertices, hashtable);
-    
-
-    // freeGraph(graph);
-    // free_hashtable(hashtable);
+    freeGraph(graph);
+    free_hashtable(hashtable);
 }

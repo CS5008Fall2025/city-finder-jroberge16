@@ -247,10 +247,12 @@ void dijkstra(AdjListGraph *graph, int src, int *dist, int *prev) {
  * @param prev Array containing the previous node information.
  * @param V The maximum number of vertices in the graph.
  */
-void printPath(int dest, int *prev, int V) {
+void printPath(int dest, int *prev, AdjListGraph *graph) {
   // Create a temporary array to store the path
+  int V = graph->numVertices;
   int path[V]; 
   int pathLength = 0;
+
 
   // First, collect the path in reverse order
   for (int v = dest; v != -1; v = prev[v]) {
@@ -259,7 +261,9 @@ void printPath(int dest, int *prev, int V) {
 
   // Then print the path in correct order (source to destination)
   for (int i = pathLength - 1; i >= 0; i--) {
-    printf("%d", path[i]);
+    char* city_name = graph->vertexIndex2Name[path[i]];
+
+    printf("%s(%d)", city_name, path[i]);
     if (i != 0) {
       printf(" -> ");
     }
@@ -273,12 +277,15 @@ void printPath(int dest, int *prev, int V) {
  * @param prev Array containing previous nodes in the optimal path.
  * @param V The number of vertices.
  */
-void printAllSolutions(int *dist, int *prev, int V) {
+void printAllSolutions(int *dist, int *prev, AdjListGraph *graph) {
+
+  int V = graph->numVertices;
+
   printf("Shortest Path from Source to Destination:\n");
   for (int i = 0; i < V; i++) {
     if (dist[i] != INT_MAX) {
       printf("Shortest path to vertex %d is %d with path: ", i, dist[i]);
-      printPath(i, prev, V);
+      printPath(i, prev, graph);
       printf("\n");
     } else {
       printf("Vertex %d is unreachable from source\n", i);
@@ -295,15 +302,19 @@ void printAllSolutions(int *dist, int *prev, int V) {
  * @param prev Array containing previous nodes in the optimal path.
  * @param V The number of vertices.
  */
-void printTheShortestPath(char* src, char* dest, int *dist, int *prev, int V, NeuHashtable* hashtable) {
-  printf("Shortest Path from Source to Destination:\n");
-  int dest_index = get_item(hashtable, dest)->vertextIndex;
+void printTheShortestPath(char* src, char* dest, int *dist, int *prev, AdjListGraph *graph) {
+
+  printf("Shortest Path from %s to %s:\n", src, dest);
+
+  int dest_index = get_item(graph->nodeName2Index, dest)->vertextIndex;
+
   if (dist[dest_index] != INT_MAX) {
-        printf("\tStarting Location: %s\n", src);
-        printf("\tDestination: %s\n", src);
+        printf("\tStarting Location: %s\n",src);
+
+        printf("\tDestination: %s\n", dest);
         printf("\tNumber of Stops: %d\n", dist[dest_index]);
         printf("\tUsing Route: ");
-        printPath(dest_index, prev, V);
+        printPath(dest_index, prev, graph);
         printf("\n");
   }
 }

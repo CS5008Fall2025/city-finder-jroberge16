@@ -19,22 +19,23 @@ typedef struct node_t {
 typedef struct {
     int numVertices;
     int capacity;
-    AdjListNode** adjList;
     bool directed;
+    AdjListNode** adjList;
+    NeuHashtable* nodeName2Index;
+    char **vertexIndex2Name;
 } AdjListGraph;
 
 #define SCALE_FACTOR 2
 
 
-AdjListGraph* createGraph(int capacity, bool directed); 
+AdjListGraph* createGraph(NeuHashtable* name2Index, bool directed); 
 void freeGraph(AdjListGraph* graph);
 
-void addEdge(AdjListGraph* graph, int src, int dest, int weight, char* name);
 int getDegree(AdjListGraph* graph, int vertex);
 int* getNeighbors(AdjListGraph* graph, int vertex);
 int getWeight(AdjListGraph* graph, int src, int dest);
 void printGraph(AdjListGraph* graph);
-void loadFromFile(AdjListGraph* graph, const char* filename,  NeuHashtable* hashtable);
+void addEdge(AdjListGraph* graph, char* src, char* dest, int weight);
 
 
 

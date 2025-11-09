@@ -23,23 +23,40 @@
  * @param directed Whether the graph is directed (true) or undirected (false).
  * @return A pointer to the newly created AdjListGraph.
  */
-AdjListGraph* createGraph(int capacity, bool directed) {
-    DEBUG_PRINT(DEBUG_INFO, "Creating graph with capacity %d\n", capacity);
+AdjListGraph* createGraph(NeuHashtable* name2Index, bool directed) {
+    DEBUG_PRINT(DEBUG_INFO, "Creating graph with capacity %d\n", name2Index->size);
+    
     AdjListGraph* graph = (AdjListGraph*)malloc(sizeof(AdjListGraph));
+
     if (graph == NULL) {
         fprintf(stderr, "Memory allocation failed for graph.\n");
         exit(EXIT_FAILURE);
     }
+    
+
     graph->numVertices = 0;
-    graph->capacity = capacity;
+    graph->capacity = name2Index->size;
     graph->directed = directed;
-    graph->adjList = (AdjListNode**)malloc(capacity * sizeof(AdjListNode*));
-    if (graph->adjList == NULL) {
+    graph->nodeName2Index = name2Index;
+    graph->adjList = (AdjListNode**)malloc(name2Index->size * sizeof(AdjListNode*));
+    graph->vertexIndex2Name = (char**)malloc(name2Index->size * sizeof(char*));
+
+    if (graph->adjList == NULL || graph->vertexIndex2Name == NULL) {
         fprintf(stderr, "Memory allocation failed for adjacency list.\n");
         free(graph);
         exit(EXIT_FAILURE);
     }
-    for (int i = 0; i < capacity; i++) {
+    for (int i = 0; i < name2Index->capacity; i++) {
+        NeuNode* current = name2Index->table[i];
+        while (current != NULL) {
+            int index = current->data.vertextIndex;
+            printf("Mapping index %d to vertex name %s\n", index, current->data.vertextID);
+            graph->vertexIndex2Name[index] = strdup(current->data.vertextID);
+            current = current->next;
+        }
+    }
+
+    for (int i = 0; i < name2Index->size; i++) {
         graph->adjList[i] = NULL;
     }
     return graph;
@@ -95,7 +112,12 @@ void __resizeGraph(AdjListGraph* graph) {
  * @param dest The destination vertex.
  * @param weight The weight of the edge.
  */
-void addEdge(AdjListGraph* graph, int src, int dest, int weight, char* name) {
+void addEdge(AdjListGraph* graph, char* src_name, char* dest_name, int weight) {
+    printf("Adding edge from %s to %s with weight %d\n", src_name, dest_name, weight);
+
+    int src = get_item(graph->nodeName2Index, src_name)->vertextIndex;
+    int dest = get_item(graph->nodeName2Index, dest_name)->vertextIndex;
+
     if (src < 0  ||  dest < 0 ) {
         fprintf(stderr, "Vertex index out of bounds.\n");
         return;
@@ -113,7 +135,7 @@ void addEdge(AdjListGraph* graph, int src, int dest, int weight, char* name) {
     }
     newNode->vertex = dest;
     newNode->weight = weight;
-    strcpy(newNode->name, name);
+    strcpy(newNode->name, dest_name);
     newNode->next = graph->adjList[src];
     graph->adjList[src] = newNode;
 
@@ -126,6 +148,7 @@ void addEdge(AdjListGraph* graph, int src, int dest, int weight, char* name) {
         }
         reverseNode->vertex = src;
         reverseNode->weight = weight;
+        strcpy(reverseNode->name, src_name);
         reverseNode->next = graph->adjList[dest];
         graph->adjList[dest] = reverseNode;
     }
@@ -211,7 +234,7 @@ void printGraph(AdjListGraph* graph) {
         printf("[");
         AdjListNode* current = graph->adjList[i];
         while (current != NULL) {
-            printf("(%d, %d)", current->vertex, current->weight);
+            printf("(%s, %d, %d)", current->name, current->vertex, current->weight);
             current = current->next;
             if (current != NULL) {
                 printf(", ");
@@ -222,9 +245,8 @@ void printGraph(AdjListGraph* graph) {
 }
 
 
-void loadFromFile(AdjListGraph* graph, const char* filename, NeuHashtable* hashtable) {
+void loadFromFile(AdjListGraph* graph, const char* filename) {
     FILE *file = fopen(filename, "r");
-
     char line[256];
     char src[10];
     char dest[10];
@@ -242,21 +264,25 @@ void loadFromFile(AdjListGraph* graph, const char* filename, NeuHashtable* hasht
                 dest,
                 &value) == 3) {
 
-            Item* src_item = get_item(hashtable, src);
-            Item* dest_item = get_item(hashtable, dest);
+            // Item* src_item = get_item(graph->nodeName2Index, src);
+            // Item* dest_item = get_item(graph->nodeName2Index, dest);
+            // printf("src name: %s, src_item index: %d\n", src, src_item->vertextIndex);
+            // printf("dest name: %s, dest_item index: %d\n", dest, dest_item->vertextIndex);
 
-            if (src_item!=NULL && dest_item!=NULL) {
-                printf("addding edge from %s (%d) to %s (%d) with weight %d\n", src, src_item->vertextIndex, dest, dest_item->vertextIndex, value);
-                addEdge(graph, src_item->vertextIndex, dest_item->vertextIndex, value, src);
-                addEdge(graph, dest_item->vertextIndex, src_item->vertextIndex, value, dest);
-                continue;
-            }else{
+            addEdge(graph, src, dest, value);
+
+
+            // if (src_item!=NULL && dest_item!=NULL) {
+            //     printf("adding edge from %s (%d) to %s (%d) with weight %d\n", src, src_item->vertextIndex, dest, dest_item->vertextIndex, value);
+            //     addEdge(graph, src_item->vertextIndex, dest_item->vertextIndex, value, src);
+            //     continue;
+            // }else{
                 
-                printf("❌ Vertex not found in hastable\n");
-                printf("adding edge from %s (%d) to %s (%d) with weight %d\n", src, src_item->vertextIndex, dest, dest_item->vertextIndex, value);
+            //     printf("❌ Vertex not found in hastable\n");
+            //     printf("adding edge from %s (%d) to %s (%d) with weight %d\n", src, src_item->vertextIndex, dest, dest_item->vertextIndex, value);
 
-                continue;
-            }
+            //     continue;
+            // }
         }   
          
     }

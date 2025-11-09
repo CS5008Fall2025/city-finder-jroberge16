@@ -5,6 +5,7 @@
         "stdio.h": "c",
         "graphreader.h": "c",
         "neuhashtable.h": "c",
-        "typeinfo": "c"
+        "typeinfo": "c",
+        "initializer_list": "c"
     }
 }
