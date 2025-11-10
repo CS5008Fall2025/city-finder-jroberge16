@@ -23,23 +23,33 @@ void helper(char *folder_path_edges, char *folder_path_nodes){
         "\t1. Find the Shortest Path\n"
         "\t2. Exit Application\n\n"
         "\n ℹ️   Current Files: {'Nodes': '%s', 'Edges': '%s'}"
-        "\n ℹ️   comandline breakdown: map.out <vertices> <edges> <debug level([0-4])>\n"
-        "\nPLEASE MAKE A SELECTION:", folder_path_nodes, folder_path_edges
+        "\n ℹ️   comandline breakdown: map.out <vertices> <edges> <debug level([0-4])>"
+        "\n ℹ️   current debug level: %d\n"
+
+        "\nPLEASE MAKE A SELECTION:", folder_path_nodes, folder_path_edges, debug_level
     );
 }
 
 
 void process_command_line_args(int argc, char *argv[], char *folder_path_edges, char *folder_path_nodes){
+    if(argc > 3) {
+        int level = atoi(argv[3]);
+        set_debug_level(level);
+        DEBUG_PRINT(DEBUG_INFO, "Setting debug level to: %d\n", level);  // Add this to verify
+    }
     if(argc > 1) {
-        strncpy(argv[1], folder_path_edges, sizeof(argv[1]) - 1);
+        DEBUG_PRINT(DEBUG_INFO, "Setting Node Folder: %s\n", argv[1]);
+        strncpy(folder_path_nodes, argv[1], 100);
+        folder_path_nodes[255] = '\0';
     }
     if(argc > 2) {
-        strncpy(argv[2], folder_path_edges, sizeof(argv[2]) - 1);
+        DEBUG_PRINT(DEBUG_INFO, "Setting Edge Folder: %s\n", argv[2]);
+        strncpy(folder_path_edges, argv[2], 100);
+        folder_path_edges[255] = '\0';
     }
-    if(argc > 3) {
-        set_debug_level(atoi(argv[3]));
-    }else{
-        set_debug_level(3);
+    if(argc < 3) {
+        DEBUG_PRINT(DEBUG_INFO, "No Debug Level Provided\n");
+        set_debug_level(DEBUG_NONE);
     }
 }
 

@@ -36,6 +36,7 @@ int* getNeighbors(AdjListGraph* graph, int vertex);
 int getWeight(AdjListGraph* graph, int src, int dest);
 void printGraph(AdjListGraph* graph);
 void addEdge(AdjListGraph* graph, char* src, char* dest, int weight);
+void loadFromFile(AdjListGraph* graph, const char* filename);
 
 
 

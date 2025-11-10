@@ -263,7 +263,7 @@ void printPath(int dest, int *prev, AdjListGraph *graph) {
   for (int i = pathLength - 1; i >= 0; i--) {
     char* city_name = graph->vertexIndex2Name[path[i]];
 
-    printf("%s(%d)", city_name, path[i]);
+    printf("%s", city_name);
     if (i != 0) {
       printf(" -> ");
     }

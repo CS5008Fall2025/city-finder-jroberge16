@@ -143,11 +143,9 @@ void add_item(NeuHashtable* hashtable, const char* vertextID, int vertextIndex) 
         exit(EXIT_FAILURE);
     }
     
-
     newNode->next = hashtable->table[hash_index];
     hashtable->table[hash_index] = newNode;
     hashtable->size++;
-   
 }
 
 /**

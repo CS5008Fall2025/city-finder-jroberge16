@@ -24,7 +24,7 @@
  * @return A pointer to the newly created AdjListGraph.
  */
 AdjListGraph* createGraph(NeuHashtable* name2Index, bool directed) {
-    DEBUG_PRINT(DEBUG_INFO, "Creating graph with capacity %d\n", name2Index->size);
+    DEBUG_PRINT(DEBUG_INFO, "Creating graph with capacity %zu\n", name2Index->size);
     
     AdjListGraph* graph = (AdjListGraph*)malloc(sizeof(AdjListGraph));
 
@@ -247,13 +247,15 @@ void printGraph(AdjListGraph* graph) {
 
 void loadFromFile(AdjListGraph* graph, const char* filename) {
     FILE *file = fopen(filename, "r");
-    char line[256];
-    char src[10];
-    char dest[10];
+    char line[250];
+    char src[100];
+    char dest[100];
+
     int value;
 
     if (file == NULL){
         printf("❌ Invalid File");
+        perror("Error with file");
         return;
     }
 
@@ -263,26 +265,7 @@ void loadFromFile(AdjListGraph* graph, const char* filename) {
                 src,
                 dest,
                 &value) == 3) {
-
-            // Item* src_item = get_item(graph->nodeName2Index, src);
-            // Item* dest_item = get_item(graph->nodeName2Index, dest);
-            // printf("src name: %s, src_item index: %d\n", src, src_item->vertextIndex);
-            // printf("dest name: %s, dest_item index: %d\n", dest, dest_item->vertextIndex);
-
             addEdge(graph, src, dest, value);
-
-
-            // if (src_item!=NULL && dest_item!=NULL) {
-            //     printf("adding edge from %s (%d) to %s (%d) with weight %d\n", src, src_item->vertextIndex, dest, dest_item->vertextIndex, value);
-            //     addEdge(graph, src_item->vertextIndex, dest_item->vertextIndex, value, src);
-            //     continue;
-            // }else{
-                
-            //     printf("❌ Vertex not found in hastable\n");
-            //     printf("adding edge from %s (%d) to %s (%d) with weight %d\n", src, src_item->vertextIndex, dest, dest_item->vertextIndex, value);
-
-            //     continue;
-            // }
         }   
          
     }
