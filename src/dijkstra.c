@@ -296,8 +296,7 @@ void printAllSolutions(int *dist, int *prev, AdjListGraph *graph) {
 
 
 /**
- * Prints the distance array showing shortest distances from source to all
- * vertices.
+ * Prints a single solution for dijkstra's algorithm.
  * @param dist Array containing shortest distances.
  * @param prev Array containing previous nodes in the optimal path.
  * @param V The number of vertices.
@@ -312,9 +311,11 @@ void printTheShortestPath(char* src, char* dest, int *dist, int *prev, AdjListGr
         printf("\tStarting Location: %s\n",src);
 
         printf("\tDestination: %s\n", dest);
-        printf("\tNumber of Stops: %d\n", dist[dest_index]);
-        printf("\tUsing Route: ");
+        printf("\tTotal Time(weight): %d\n", dist[dest_index]);
+        printf("\tRoute Used: ");
         printPath(dest_index, prev, graph);
         printf("\n");
   }
 }
+
+

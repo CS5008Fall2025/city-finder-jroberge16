@@ -119,19 +119,19 @@ void reader_close(GraphReader* reader) {
 
 
 NeuHashtable* read_vertices(const char* file_name){
-    FILE *file;
+    FILE *myfile;
     char line[256]; 
     int index = 0;
 
     NeuHashtable* hashtable = create_hashtable(25);
 
-    file = fopen(file_name, "r");
-    if (file == NULL){
+    myfile = fopen(file_name, "r");
+    if (myfile == NULL){
         printf("❌ Invalid File");
         return NULL;
     }
     
-    while(fgets(line, sizeof(line), file)) {
+    while(fgets(line, sizeof(line), myfile)) {
         line[strcspn(line, "\r\n")] = '\0';
         
         if (strlen(line) == 0) {
@@ -140,6 +140,6 @@ NeuHashtable* read_vertices(const char* file_name){
         add_item(hashtable, line, index);
         index++;
     }
-    fclose(file);
+    fclose(myfile);
     return hashtable;
 }

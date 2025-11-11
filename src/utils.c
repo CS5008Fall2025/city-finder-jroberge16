@@ -30,7 +30,14 @@ void helper(char *folder_path_edges, char *folder_path_nodes){
     );
 }
 
-
+/**
+ * Takes Comandline arguments and processes them and set the debug level.
+ * 
+ * @param argc arg count
+ * @param argv arg vector
+ * @param folder_path_edges edge path
+ * @param folder_path_nodes node path
+ */
 void process_command_line_args(int argc, char *argv[], char *folder_path_edges, char *folder_path_nodes){
     if(argc > 3) {
         int level = atoi(argv[3]);

@@ -1,26 +1,25 @@
 /** 
- * Main Entry Point for City Finder Application
-*/
+ *  * Main Entry Point for City Finder Application
+ */
 
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <string.h>
+ #include <stdbool.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <errno.h>
+ #include <string.h>
 
-#include "adjList.h"
-#include "utils.h"
-#include "dijkstra.h"
-#include "debug.h"
-#include "GraphReader.h"
-#include "NeuHashtable.h"
-#include "shortestPathService.h"
-
-
+ #include "adjList.h"
+ #include "utils.h"
+ #include "dijkstra.h"
+ #include "debug.h"
+ #include "GraphReader.h"
+ #include "NeuHashtable.h"
+ #include "shortestPathService.h"
 
 
-int main(int argc, char *argv[]) {
 
+
+ int main(int argc, char *argv[]) {
     int user_selection = 0;
 
     char folder_path_edges[] = "./data/distances.txt";

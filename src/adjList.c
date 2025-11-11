@@ -15,8 +15,6 @@
 
 
 
-
-
 /**
  * Creates a new adjacency list graph with the given capacity.
  * @param capacity The initial capacity (number of vertices) of the graph.
@@ -50,7 +48,7 @@ AdjListGraph* createGraph(NeuHashtable* name2Index, bool directed) {
         NeuNode* current = name2Index->table[i];
         while (current != NULL) {
             int index = current->data.vertextIndex;
-            printf("Mapping index %d to vertex name %s\n", index, current->data.vertextID);
+            DEBUG_PRINT(DEBUG_INFO, "Connecting index %d to proper name %s\n", index, current->data.vertextID);
             graph->vertexIndex2Name[index] = strdup(current->data.vertextID);
             current = current->next;
         }
@@ -113,13 +111,14 @@ void __resizeGraph(AdjListGraph* graph) {
  * @param weight The weight of the edge.
  */
 void addEdge(AdjListGraph* graph, char* src_name, char* dest_name, int weight) {
-    printf("Adding edge from %s to %s with weight %d\n", src_name, dest_name, weight);
+
+    DEBUG_PRINT(DEBUG_INFO, "Making/Add edge from %s to %s with weight %d\n", src_name, dest_name, weight);
 
     int src = get_item(graph->nodeName2Index, src_name)->vertextIndex;
     int dest = get_item(graph->nodeName2Index, dest_name)->vertextIndex;
 
     if (src < 0  ||  dest < 0 ) {
-        fprintf(stderr, "Vertex index out of bounds.\n");
+        DEBUG_PRINT(DEBUG_ERROR, "Vertex index out of bounds.");
         return;
     }
     graph->numVertices = (src >= graph->numVertices) ? src + 1 : graph->numVertices;
@@ -130,6 +129,7 @@ void addEdge(AdjListGraph* graph, char* src_name, char* dest_name, int weight) {
     }
     AdjListNode* newNode = (AdjListNode*)malloc(sizeof(AdjListNode));
     if (newNode == NULL) {
+        DEBUG_PRINT(DEBUG_ERROR, "Memory allocation failed for new node.\n");
         fprintf(stderr, "Memory allocation failed for new node.\n");
         exit(EXIT_FAILURE);
     }

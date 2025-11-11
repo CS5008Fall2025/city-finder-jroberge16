@@ -37,10 +37,10 @@ int __proccess_city_selection(NeuHashtable* hashtable, char* src, char* dest){
     Item* destitem = get_item(hashtable, dest);
     
     if(srcitem == NULL|| destitem == NULL){
-        printf("\n❌ Invalid city selection");
+        DEBUG_PRINT(DEBUG_ERROR,"\n❌ Invalid city selection");
         return 1;
     } else {
-        printf("\n✅ Good selection");
+        DEBUG_PRINT(DEBUG_INFO,"\n✅ Good selection");
         return 0;
     }
 }
