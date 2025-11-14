@@ -10,7 +10,6 @@
 
 /**
  * This displays the help menu
- * TODO: Add default starting file
  */
 void helper(char *folder_path_edges, char *folder_path_nodes){
     printf(

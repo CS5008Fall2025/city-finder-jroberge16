@@ -18,8 +18,13 @@
 
 
 
-
- int main(int argc, char *argv[]) {
+/**
+ * Main entry point for the program.
+ * - comandline breakdown: map.out <vertices> <edges> <debug level([0-4])>
+ * @param argc arg count.
+ * @param argv arg lsit.
+ */
+int main(int argc, char *argv[]) {
     int user_selection = 0;
 
     char folder_path_edges[] = "./data/distances.txt";
@@ -36,7 +41,6 @@
                 shorttest_path_service(folder_path_edges, folder_path_nodes);
                 break;
             case 2:
-                printf("in exit App");
                 return 0;
             default:
                 printf("❌ Invalid Selection please select a number 1-3");
