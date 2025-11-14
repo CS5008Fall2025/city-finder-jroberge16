@@ -9,11 +9,21 @@ Link to Assignment on Github: (copy and paste the link to your assignment repo h
 
 How many hours did it take you to complete this assignment (estimate)? 
 
+* 20 hours
+
 Did you collaborate with any other students/TAs/Professors? If so, tell us who and in what capacity.  
-- one per row, add more if needed
+
+- None
 
 
-Did you use any external resources (you do not have to cite in class material)? (Cite them below)  
-- one row per resource
+Did you use any external resources (you do not have to cite in class material)? (Cite them below)
+
+[1] Dolci , C., & Salvini, D. (n.d.). Quadtrees. http://www.gitta.info/SpatPartitio/en/html/RegDecomp_learningObject3.html 
+
+[2] GeeksforGeeks. (2025, July 23). P, NP, CoNP, NP hard and NP complete: Complexity Classes. GeeksforGeeks. https://www.geeksforgeeks.org/dsa/types-of-complexity-classes-p-np-conp-np-hard-and-np-complete/ 
+
+[3] Setty, V. (2024, September 13). Time complexity analysis of Dijkstra’s algorithm. Medium. https://medium.com/@vikramsetty169/time-complexity-of-dijkstras-algorithm-ed4a068e1633 
+
+[4] Wikimedia Foundation. (2025, October 15). Travelling salesman problem. Wikipedia. https://en.wikipedia.org/wiki/Travelling_salesman_problem#:~:text=The%20TSP%20has%20several%20applications,areas%2C%20such%20as%20DNA%20sequencing. 
 
 
