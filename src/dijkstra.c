@@ -37,7 +37,7 @@ NeuHeap *__createHeap(int capacity) {
   minHeap->capacity = capacity; // Initial capacity
   minHeap->array =
       (NeuHeapNode **)malloc(minHeap->capacity * sizeof(NeuHeapNode *));
-  minHeap->heap_postion = (int *)malloc(capacity * sizeof(int));
+  minHeap->heap_position = (int *)malloc(capacity * sizeof(int));
   return minHeap;
 }
 
@@ -50,7 +50,7 @@ void __freeHeap(NeuHeap *minHeap) {
     free(minHeap->array[i]);
   }
   free(minHeap->array);
-  free(minHeap->heap_postion);
+  free(minHeap->heap_position);
   free(minHeap);
 }
 
@@ -81,8 +81,8 @@ bool __heapIsEmpty(NeuHeap *minHeap) { return minHeap->size == 0; }
  */
 void __heapSwapWithPos(NeuHeap *minHeap, int a, int b) {
   // Update position array
-  minHeap->heap_postion[minHeap->array[a]->data] = b;
-  minHeap->heap_postion[minHeap->array[b]->data] = a;
+  minHeap->heap_position[minHeap->array[a]->data] = b;
+  minHeap->heap_position[minHeap->array[b]->data] = a;
   
   // Swap the nodes
   __heapSwap(&minHeap->array[a], &minHeap->array[b]);
@@ -96,7 +96,7 @@ void __heapSwapWithPos(NeuHeap *minHeap, int a, int b) {
  */
 void __heapDecreaseKey(NeuHeap *minHeap, NeuHeapNode *node, int newDist) {
   node->dist = newDist;
-  int i = minHeap->heap_postion[node->data];  // Get actual position in heap
+  int i = minHeap->heap_position[node->data];  // Get actual position in heap
   while (i != 0 &&
          minHeap->array[__heapParent(i)]->dist > minHeap->array[i]->dist) {
     __heapSwapWithPos(minHeap, i, __heapParent(i));
@@ -116,7 +116,7 @@ NeuHeapNode *__heapInsert(NeuHeap *minHeap, int data, int dist) {
   newNode->data = data;
   newNode->dist = dist;
   minHeap->array[minHeap->size] = newNode;
-  minHeap->heap_postion[data] = minHeap->size;
+  minHeap->heap_position[data] = minHeap->size;
   minHeap->size++;
   __heapDecreaseKey(minHeap, newNode, dist);
   
@@ -166,7 +166,7 @@ NeuHeapNode *__heapExtractMin(NeuHeap *minHeap) {
   NeuHeapNode *root = minHeap->array[0];
   if (minHeap->size > 1) {
     minHeap->array[0] = minHeap->array[minHeap->size - 1];
-    minHeap->heap_postion[minHeap->array[0]->data] = 0;
+    minHeap->heap_position[minHeap->array[0]->data] = 0;
     minHeap->size--;
     __heapify(minHeap, 0);
   } else {
