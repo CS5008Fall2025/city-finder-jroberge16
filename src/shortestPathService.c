@@ -72,6 +72,8 @@ void shorttest_path_service(NeuHashtable* hashtable, AdjListGraph * graph, char 
     dijkstra(graph, get_item(hashtable, src)->vertextIndex, dist, prev);
     
     if (debug_level >= DEBUG_INFO){
+        printf("\nℹ️ Array in grpah:\n");
+        print_array(graph);
         printf("\nℹ️ Hash Table Visual");
         print_table_visual(hashtable);
         printf("\nℹ️ Graph Print Out");

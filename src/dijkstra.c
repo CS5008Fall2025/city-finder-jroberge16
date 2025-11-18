@@ -22,6 +22,7 @@ typedef struct {
 typedef struct {
   int size;            // Current size of the heap
   int capacity;        // Maximum capacity of the heap
+  int *heap_position;            // Position in heap
   NeuHeapNode **array; // Array of heap nodes
 } NeuHeap;
 
@@ -36,6 +37,7 @@ NeuHeap *__createHeap(int capacity) {
   minHeap->capacity = capacity; // Initial capacity
   minHeap->array =
       (NeuHeapNode **)malloc(minHeap->capacity * sizeof(NeuHeapNode *));
+  minHeap->heap_postion = (int *)malloc(capacity * sizeof(int));
   return minHeap;
 }
 
@@ -48,10 +50,9 @@ void __freeHeap(NeuHeap *minHeap) {
     free(minHeap->array[i]);
   }
   free(minHeap->array);
+  free(minHeap->heap_postion);
   free(minHeap);
 }
-
-
 
 /**
  * Swaps two nodes in the min heap.
@@ -72,22 +73,54 @@ int __heapLeft(int i) { return (2 * i + 1); }
 int __heapRight(int i) { return (2 * i + 2); }
 bool __heapIsEmpty(NeuHeap *minHeap) { return minHeap->size == 0; }
 
+/**
+ * Swaps two nodes in the min heap and updates position tracking.
+ * @param minHeap The min heap.
+ * @param a Index of first node.
+ * @param b Index of second node.
+ */
+void __heapSwapWithPos(NeuHeap *minHeap, int a, int b) {
+  // Update position array
+  minHeap->heap_postion[minHeap->array[a]->data] = b;
+  minHeap->heap_postion[minHeap->array[b]->data] = a;
+  
+  // Swap the nodes
+  __heapSwap(&minHeap->array[a], &minHeap->array[b]);
+}
 
 /**
- * propogates changes up the tree.
- * 
+ * Decreases the key (distance) of a node in the min heap.
+ * @param minHeap The min heap to update.
+ * @param node The node to update.
+ * @param newDist The new distance value.
  */
-void __heapify_up(NeuHeap *minHeap, int start) {
-    int current = start;
-    int current_distance = minHeap->array[current]->dist;
-    int parent_distance = minHeap->array[__heapParent(current)]->dist;
-
-    while ((current != 0) && (parent_distance > current_distance)) {
-    __heapSwap(&minHeap->array[current], &minHeap->array[__heapParent(current)]);
-    current = __heapParent(current);
-    current_distance = minHeap->array[current]->dist;
-    parent_distance = minHeap->array[__heapParent(current)]->dist;
+void __heapDecreaseKey(NeuHeap *minHeap, NeuHeapNode *node, int newDist) {
+  node->dist = newDist;
+  int i = minHeap->heap_postion[node->data];  // Get actual position in heap
+  while (i != 0 &&
+         minHeap->array[__heapParent(i)]->dist > minHeap->array[i]->dist) {
+    __heapSwapWithPos(minHeap, i, __heapParent(i));
+    i = __heapParent(i);
   }
+}
+
+/**
+ * Inserts a new node into the min heap.
+ * @param minHeap The min heap to insert into.
+ * @param data The vertex index.
+ * @param dist The distance from the source.
+ * @return A pointer to the newly created node.
+ */
+NeuHeapNode *__heapInsert(NeuHeap *minHeap, int data, int dist) {
+  NeuHeapNode *newNode = (NeuHeapNode *)malloc(sizeof(NeuHeapNode));
+  newNode->data = data;
+  newNode->dist = dist;
+  minHeap->array[minHeap->size] = newNode;
+  minHeap->heap_postion[data] = minHeap->size;
+  minHeap->size++;
+  __heapDecreaseKey(minHeap, newNode, dist);
+  
+  return newNode;
 }
 
 /**
@@ -95,7 +128,7 @@ void __heapify_up(NeuHeap *minHeap, int start) {
  * @param minHeap The min heap to heapify.
  * @param i The index of the root of the subtree.
  */
-void __heapify_down(NeuHeap *minHeap, int i) {
+void __heapify(NeuHeap *minHeap, int i) {
   int smallest = i;
   int left = __heapLeft(i);
   int right = __heapRight(i);
@@ -115,49 +148,11 @@ void __heapify_down(NeuHeap *minHeap, int i) {
   // If smallest is not root
   if (smallest != i) {
     // Swap the nodes
-    __heapSwap(&minHeap->array[i], &minHeap->array[smallest]);
+    __heapSwapWithPos(minHeap, i, smallest);
     // Recursively heapify the affected sub-tree
-    __heapify_down(minHeap, smallest);
+    __heapify(minHeap, smallest);
   }
 }
-
-/**
- * Inserts a new node into the min heap.
- * @param minHeap The min heap to insert into.
- * @param data The vertex index.
- * @param dist The distance from the source.
- * @return A pointer to the newly created node.
- */
-NeuHeapNode *__heapInsert(NeuHeap *minHeap, int data, int dist) {
-  NeuHeapNode *newNode = (NeuHeapNode *)malloc(sizeof(NeuHeapNode));
-  newNode->data = data;
-  newNode->dist = dist;
-  minHeap->array[minHeap->size] = newNode;
-  minHeap->size++;
-
-  int i = minHeap->size-1;
-  __heapify_up(minHeap, i);
-  return newNode;
-}
-
-
-
-/**
- * Decreases the key (distance) of a node in the min heap.
- * @param minHeap The min heap to update.
- * @param node The node to update.
- * @param newDist The new distance value.
- */
-void __heapDecreaseKey(NeuHeap *minHeap, NeuHeapNode *node, int newDist) {
-  node->dist = newDist;
-  int i = node->data;
-  while (i != 0 &&
-         minHeap->array[__heapParent(i)]->dist > minHeap->array[i]->dist) {
-    __heapSwap(&minHeap->array[i], &minHeap->array[__heapParent(i)]);
-    i = __heapParent(i);
-  }
-}
-
 
 /**
  * Extracts the minimum node from the min heap.
@@ -171,8 +166,9 @@ NeuHeapNode *__heapExtractMin(NeuHeap *minHeap) {
   NeuHeapNode *root = minHeap->array[0];
   if (minHeap->size > 1) {
     minHeap->array[0] = minHeap->array[minHeap->size - 1];
+    minHeap->heap_postion[minHeap->array[0]->data] = 0;
     minHeap->size--;
-    __heapify_down(minHeap, 0);
+    __heapify(minHeap, 0);
   } else {
     minHeap->size--;
   }
@@ -190,56 +186,51 @@ NeuHeapNode *__heapExtractMin(NeuHeap *minHeap) {
  * @param prev Output array to store the previous node in the optimal path.
  */
 void dijkstra(AdjListGraph *graph, int src, int *dist, int *prev) {
-  // Initialize distance array and previous array
-  for (int i = 0; i < graph->numVertices; i++) {
+  
+  for(int i=0; i < graph->numVertices;i++){
     dist[i] = INT_MAX;
     prev[i] = -1;
+
   }
+
   dist[src] = 0;
 
-  // Create a min heap to store vertices and their distances
-  NeuHeap *minHeap = __createHeap(graph->numVertices);
-
-  // Insert all vertices into the min heap
-  // we track the nodes, so we can have direct access to 
-  // update the distance instead of having to search for the node
+  NeuHeap* minHeap = __createHeap(graph->numVertices);
   NeuHeapNode *nodes[graph->numVertices];
 
-  for (int i = 0; i < graph->numVertices; i++) {
-    nodes[i] = __heapInsert(minHeap, i, dist[i]);
+  for(int i=0; i < graph->numVertices; i++){
+    nodes[i]  =__heapInsert(minHeap, i, dist[i]);
   }
 
-  // Main loop for Dijkstra's algorithm
-  while (!__heapIsEmpty(minHeap)) {
-    // Extract the vertex with the minimum distance
+  while(!__heapIsEmpty(minHeap)){
     NeuHeapNode *minNode = __heapExtractMin(minHeap);
     int u = minNode->data;
-
-    // If the extracted vertex is at infinity, all remaining vertices are
-    // unreachable
-    if (dist[u] == INT_MAX) {
+    
+    if(dist[u]==INT_MAX){
+      free(minNode);
       break;
     }
-
-    // For each adjacent vertex v, update dist[v] if there's a shorter path
-    // through u
+    
     AdjListNode *curr = graph->adjList[u];
-    while (curr != NULL) {
+    while(curr!=NULL){
       int v = curr->vertex;
       int weight = curr->weight;
 
-      // If there's a shorter path to v through u
-      if (dist[u] != INT_MAX && dist[u] + weight < dist[v]) {
+      if(dist[u] != INT_MAX && dist[u] + weight< dist[v]){
         dist[v] = dist[u] + weight;
         prev[v] = u;
-        // Update the distance in the heap
         __heapDecreaseKey(minHeap, nodes[v], dist[v]);
       }
       curr = curr->next;
+
     }
   }
+
   __freeHeap(minHeap);
 }
+
+
+
 /**
  * Prints the shortest path from source to a given vertex.
  * @param src The source vertex.
@@ -283,11 +274,11 @@ void printAllSolutions(int *dist, int *prev, AdjListGraph *graph) {
   printf("Shortest Path from Source to Destination:\n");
   for (int i = 0; i < V; i++) {
     if (dist[i] != INT_MAX) {
-      printf("Shortest path to vertex %d is %d with path: ", i, dist[i]);
+      printf("Shortest path to vertex [%s,%d] is %d with path: ", graph->vertexIndex2Name[i], i, dist[i]);
       printPath(i, prev, graph);
       printf("\n");
     } else {
-      printf("Vertex %d is unreachable from source\n", i);
+      printf("Vertex [%s,%d] is unreachable from source\n", graph->vertexIndex2Name[i], i);
     }
   }
   printf("\n");
@@ -302,8 +293,6 @@ void printAllSolutions(int *dist, int *prev, AdjListGraph *graph) {
  */
 void printTheShortestPath(char* src, char* dest, int *dist, int *prev, AdjListGraph *graph) {
 
-  printf("Shortest Path from %s to %s:\n", src, dest);
-
   int dest_index = get_item(graph->nodeName2Index, dest)->vertextIndex;
   int src_index = get_item(graph->nodeName2Index, src)->vertextIndex;
   
@@ -312,7 +301,8 @@ void printTheShortestPath(char* src, char* dest, int *dist, int *prev, AdjListGr
         printPath(dest_index, prev, graph);
         printf("\n");
         printf("Total Distance: %d", dist[dest_index]);
-  }else {
+  }
+  else {
       printf("Invalid Command");
   }
 }

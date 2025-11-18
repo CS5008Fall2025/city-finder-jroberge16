@@ -230,7 +230,7 @@ int getWeight(AdjListGraph* graph, int src, int dest) {
  */
 void printGraph(AdjListGraph* graph) {
    for(int i = 0; i < graph->numVertices; i++) {
-        printf("%d: ", i);
+        printf("[%s,%d]: ", graph->vertexIndex2Name[i], i);
         printf("[");
         AdjListNode* current = graph->adjList[i];
         while (current != NULL) {
@@ -270,4 +270,11 @@ void loadFromFile(AdjListGraph* graph, const char* filename) {
          
     }
     fclose(file);
+}
+
+
+void print_array(AdjListGraph* graph){
+    for(int i = 0; i < graph->numVertices; i++) {
+        printf("Index %d: %s\n", i, graph->vertexIndex2Name[i]);
+    }
 }
