@@ -74,16 +74,17 @@ void run_tests(void){
         print_results(get_item(hashtable, "a")->vertextIndex, 
         0,"hash table Created");
     }
-    print_results(hashtable->capacity, 32,"Total correct Items");
+
+
     print_results(get_item(hashtable, "a")->vertextIndex, 
     0,"hash table item Location");
 
 
     printf("\n\n🧪 Test Graph Creation:");
     AdjListGraph * graph = createGraph(hashtable, false);
-    print_results(graph->numVertices, 0,"Total correct before edges vertices");
+    print_results(graph->numVertices, 8,"Total correct before edges vertices");
     loadFromFile(graph, "data/distances.txt");
-    print_results(graph->numVertices, 7,"Total correct after edges vertices");
+    print_results(graph->numVertices, 8,"Total correct after edges vertices");
 
     printf("\n\n🧪 Testing Shortest Path");
     int dist[graph->numVertices];

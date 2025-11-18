@@ -32,7 +32,7 @@ AdjListGraph* createGraph(NeuHashtable* name2Index, bool directed) {
     }
     
 
-    graph->numVertices = 0;
+    graph->numVertices = name2Index->size;
     graph->capacity = name2Index->size;
     graph->directed = directed;
     graph->nodeName2Index = name2Index;

@@ -306,15 +306,17 @@ void printTheShortestPath(char* src, char* dest, int *dist, int *prev, AdjListGr
   printf("Shortest Path from %s to %s:\n", src, dest);
 
   int dest_index = get_item(graph->nodeName2Index, dest)->vertextIndex;
-
-  if (dist[dest_index] != INT_MAX) {
-        printf("\tStarting Location: %s\n",src);
+  int src_index = get_item(graph->nodeName2Index, src)->vertextIndex;
+  
+  if (dist[dest_index] != INT_MAX && dist[src_index] != INT_MAX && prev[dest_index] != -1) {
 
         printf("\tDestination: %s\n", dest);
         printf("\tTotal Time(weight): %d\n", dist[dest_index]);
         printf("\tRoute Used: ");
         printPath(dest_index, prev, graph);
         printf("\n");
+  }else {
+      printf("No Viable path from %s to %s\n", src, dest);
   }
 }
 

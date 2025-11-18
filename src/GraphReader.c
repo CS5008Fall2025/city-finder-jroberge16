@@ -123,7 +123,7 @@ NeuHashtable* read_vertices(const char* file_name){
     char line[256]; 
     int index = 0;
 
-    NeuHashtable* hashtable = create_hashtable(25);
+    NeuHashtable* hashtable = create_hashtable(50);
 
     myfile = fopen(file_name, "r");
     if (myfile == NULL){
