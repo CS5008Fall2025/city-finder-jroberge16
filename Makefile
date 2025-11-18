@@ -3,9 +3,12 @@ MAIN_CFLAGS = -Wall  # this variable is command line arguments
 MAINPROGRAM = ./src/main.c ./src/utils.c ./src/debug.c ./src/GraphReader.c ./src/adjList.c ./src/NeuHashtable.c ./src/shortestPathService.c ./src/dijkstra.c # this variable is the list of all the .c files to compile
 TESTPROGRAM = ./tests/test.c ./src/utils.c ./src/debug.c ./src/GraphReader.c ./src/adjList.c ./src/NeuHashtable.c ./src/shortestPathService.c ./src/dijkstra.c
 TEST_CFLAGS = -Wall -I./src
-all: main #runs target myprogram is nothing is passed into make
+all: myprogram #runs target myprogram is nothing is passed into make
 
 main: # it needs to compile out to >>>map.out<<<!
+	$(CC) $(MAIN_CFLAGS) -o map.out $(MAINPROGRAM)
+
+myprogram: # it needs to compile out to >>>map.out<<<!
 	$(CC) $(MAIN_CFLAGS) -o map.out $(MAINPROGRAM)  
 
 test: 
