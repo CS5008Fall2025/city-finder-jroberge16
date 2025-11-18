@@ -268,7 +268,7 @@ void print_keys(NeuHashtable *hashtable){
     for (int i = 0; i < hashtable->capacity; i++) {
         NeuNode* current = hashtable->table[i];
         while (current != NULL) {
-            printf("%s\n", current->data.vertextID);
+            printf("%s", current->data.vertextID);
             current = current->next;
         }
 

@@ -262,10 +262,9 @@ void printPath(int dest, int *prev, AdjListGraph *graph) {
   // Then print the path in correct order (source to destination)
   for (int i = pathLength - 1; i >= 0; i--) {
     char* city_name = graph->vertexIndex2Name[path[i]];
-
     printf("%s", city_name);
     if (i != 0) {
-      printf(" -> ");
+      printf("\n");
     }
   }
 }
@@ -309,14 +308,12 @@ void printTheShortestPath(char* src, char* dest, int *dist, int *prev, AdjListGr
   int src_index = get_item(graph->nodeName2Index, src)->vertextIndex;
   
   if (dist[dest_index] != INT_MAX && dist[src_index] != INT_MAX && prev[dest_index] != -1) {
-
-        printf("\tDestination: %s\n", dest);
-        printf("\tTotal Time(weight): %d\n", dist[dest_index]);
-        printf("\tRoute Used: ");
+        printf("Path Found...\n");
         printPath(dest_index, prev, graph);
         printf("\n");
+        printf("Total Distance: %d", dist[dest_index]);
   }else {
-      printf("No Viable path from %s to %s\n", src, dest);
+      printf("Invalid Command");
   }
 }
 

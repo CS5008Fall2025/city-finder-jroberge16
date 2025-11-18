@@ -4,7 +4,13 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "adjList.h"
+#include "utils.h"
+#include "dijkstra.h"
 #include "debug.h"
+#include "GraphReader.h"
+#include "NeuHashtable.h"
+#include "shortestPathService.h"
 
 
 
@@ -13,21 +19,14 @@
 /**
  * This displays the help menu
  */
-void helper(char *folder_path_edges, char *folder_path_nodes){
+void helper(){
     printf(
-        "\n=====================================================================\n"
-        "=====\t\t\t 🏢   City Finder 🏢 \t\t\t=====\n"
-        "=====================================================================\n"
-        "Welcome to the City Finder application. This application is designed \nto find you the shortest path between two cities.\n"
-        "\n"
-        "Select a Number:\n"
-        "\t1. Find the Shortest Path\n"
-        "\t2. Exit Application\n\n"
-        "\n ℹ️   Current Files: {'Nodes': '%s', 'Edges': '%s'}"
-        "\n ℹ️   comandline breakdown: map.out <vertices> <edges> <debug level([0-4])>"
-        "\n ℹ️   current debug level: %d\n"
-
-        "\nPLEASE MAKE A SELECTION:", folder_path_nodes, folder_path_edges, debug_level
+        "\n*****Welcome to the shortest path finder!******\n"
+        "Commands:"
+        "\n\tlist - list all cities"
+        "\n\t<city1> <city2> - find the shortest path between two cities"
+        "\n\thelp - print this help message"
+        "\n\texit - exit the program"
     );
 }
 
@@ -72,5 +71,67 @@ void process_command_line_args(int argc, char *argv[], char *folder_path_edges, 
     }
 }
 
+void __clean_exit(NeuHashtable* hashtable, AdjListGraph* graph){
+    free_hashtable(hashtable);
+    freeGraph(graph);
+}
 
+
+void get_next_command(NeuHashtable* hashtable, AdjListGraph* graph){
+    char user_selection[20];
+    char src[50];
+    char dest[50];
+    while(1){
+        printf("\nWhere do you want to go today?");
+
+        if (!fgets(user_selection, sizeof(user_selection), stdin)) {
+            continue;  // input error, retry
+        }
+        user_selection[strcspn(user_selection, "\n")] = '\0';
+        int count = sscanf(user_selection, "%49s %49s", src, dest);
+
+
+        if (strcmp(user_selection, "list") == 0){
+            print_keys(hashtable);
+
+        }
+        else if (strcmp(user_selection, "help") == 0){
+            helper();
+        }
+        else if (strcmp(user_selection, "exit") == 0){
+            printf("\nGoodbye!");
+            __clean_exit(hashtable, graph);
+            exit(0);
+        }
+        else if (count == 2){    
+            shorttest_path_service(hashtable, graph, src, dest);
+        } else {
+            printf("Invalid Command.");
+        }
+    }
+}
+
+
+
+/**
+ * Main entry point for the program.
+ * - comandline breakdown: map.out <vertices> <edges> <debug level([0-4])>
+ * @param argc arg count.
+ * @param argv arg lsit.
+ */
+int main_program(int argc, char *argv[]) {
+
+    char folder_path_edges[] = "./data/distances.txt";
+    char folder_path_nodes[] = "./data/vertices.txt";
+    
+    process_command_line_args(argc, argv,  folder_path_edges, folder_path_nodes);
+
+    // Read in graph and vertexes:
+    NeuHashtable* hashtable = read_vertices(folder_path_nodes);
+    AdjListGraph * graph = createGraph(hashtable, false);
+    loadFromFile(graph, folder_path_edges);
+    helper();
+    get_next_command(hashtable, graph);
+    return 0;
+}
 
