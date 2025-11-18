@@ -2,8 +2,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "debug.h"
+
 
 
 
@@ -45,13 +47,24 @@ void process_command_line_args(int argc, char *argv[], char *folder_path_edges, 
     }
     if(argc > 1) {
         DEBUG_PRINT(DEBUG_INFO, "Setting Node Folder: %s\n", argv[1]);
-        strncpy(folder_path_nodes, argv[1], 100);
-        folder_path_nodes[255] = '\0';
+        if (access(argv[1], F_OK) == 0) {
+            strncpy(folder_path_nodes, argv[1], 100);
+            folder_path_nodes[255] = '\0';
+        } else {
+            DEBUG_PRINT(DEBUG_ERROR, "Node folder path '%s' does not exist.\n", argv[1]);
+            exit(EXIT_FAILURE);
+        }
     }
     if(argc > 2) {
         DEBUG_PRINT(DEBUG_INFO, "Setting Edge Folder: %s\n", argv[2]);
-        strncpy(folder_path_edges, argv[2], 100);
-        folder_path_edges[255] = '\0';
+        if (access(argv[2], F_OK) == 0) {
+            strncpy(folder_path_edges, argv[2], 100);
+            folder_path_edges[255] = '\0';
+        } else {
+            DEBUG_PRINT(DEBUG_ERROR, "Edge folder path '%s' does not exist.\n", argv[2]);
+            exit(EXIT_FAILURE);
+        }
+
     }
     if(argc < 3) {
         DEBUG_PRINT(DEBUG_INFO, "No Debug Level Provided\n");
