@@ -117,29 +117,34 @@ void reader_close(GraphReader* reader) {
     }
 }
 
-
+/**
+ * Read vertex file and assigsn each vertext to a hashtable
+ * map does the following: vertex name -> index position
+ * @param file_name file path  
+ */
 NeuHashtable* read_vertices(const char* file_name){
     FILE *myfile;
     char line[256]; 
     int index = 0;
-
+    // create hastable which is dynamic in size 
     NeuHashtable* hashtable = create_hashtable(50);
-
+    // open file with read permissions
     myfile = fopen(file_name, "r");
     if (myfile == NULL){
         printf("❌ Invalid File");
         return NULL;
     }
-    
+    // get line add to mapping
     while(fgets(line, sizeof(line), myfile)) {
         line[strcspn(line, "\r\n")] = '\0';
-        
+        // empty or end of line
         if (strlen(line) == 0) {
             continue;
         }
         add_item(hashtable, line, index);
-        index++;
+        index++;// name mapping is in order
     }
+    // close files
     fclose(myfile);
     return hashtable;
 }

@@ -16,53 +16,75 @@
 #include "NeuHashtable.h"
 
 
+// /**
+//  * Check that city selection was valid
+//  * @param hashtable hashtable of proper name -> index.
+//  * @param src source proper name .
+//  * @param dest destination proper name
+//  * @return 0 is valid else 1
+//  */
+// int __check_city_selection(NeuHashtable* hashtable, char* src, char* dest ){
+//     // get index of proper name
+//     Item* srcitem = get_item(hashtable, src); 
+//     Item* destitem = get_item(hashtable, dest); 
 
-int __check_city_selection(NeuHashtable* hashtable, char* src, char* dest ){
+//     // if NULL bad names
+//     if(srcitem == NULL|| destitem == NULL){
+//         printf("\n\nInvalid city selection");
+//         return 1;
+//     } else {
+//         // good selection otherwise
+//         printf("good Selection");
+//         return 0;
+//     }
+// }
 
-    Item* srcitem = get_item(hashtable, src);
-    Item* destitem = get_item(hashtable, dest);
-
-    if(srcitem == NULL|| destitem == NULL){
-        printf("\n\nInvalid city selection");
-        return 1;
-    } else {
-        printf("good Selection");
-        return 0;
-    }
-}
-
-
+/**
+ * Check that city selection was valid
+ * @param hashtable hashtable of proper name -> index.
+ * @param src source proper name .
+ * @param dest destination proper name
+ * @return 0 is valid else 1
+ */
 int __proccess_city_selection(NeuHashtable* hashtable, char* src, char* dest){
+    // get index of proper name
     Item* srcitem = get_item(hashtable, src);
     Item* destitem = get_item(hashtable, dest);
-    
+    // if NULL bad names
     if(srcitem == NULL|| destitem == NULL){
         printf("Invalid Command");
         DEBUG_PRINT(DEBUG_ERROR,"\n❌ Invalid city selection");
         return 1;
     } else {
+        // good selection otherwise
         DEBUG_PRINT(DEBUG_INFO,"\n✅ Good selection");
         return 0;
     }
 }
 
-bool __continue_finding_menu(){
-    char userchoice =  '\0';
-    while(1){
-        printf("\n🏢  Would you like to find find another shorter path? (y/n)\n");
-        scanf(" %c", &userchoice);
-        if(userchoice == 'y' || userchoice=='Y'){
-            return 1;
-        } else if (userchoice == 'n' || userchoice=='N'){
-            return 0;
-        } else {
-            printf("❌ Invalid selection. Please select y or n");
-        }
-    }
-}
+// bool __continue_finding_menu(){
+//     char userchoice =  '\0';
+//     while(1){
+//         printf("\n🏢  Would you like to find find another shorter path? (y/n)\n");
+//         scanf(" %c", &userchoice);
+//         if(userchoice == 'y' || userchoice=='Y'){
+//             return 1;
+//         } else if (userchoice == 'n' || userchoice=='N'){
+//             return 0;
+//         } else {
+//             printf("❌ Invalid selection. Please select y or n");
+//         }
+//     }
+// }
 
 
-
+/**
+ * Contains of the logic for presenting the dijkstra shortest path service to the user
+ * @param hashtable hashtable of vertices->index.
+ * @param graph adjacency list.
+ * @param src source proper name
+ * @param dest destination proper name 
+ */
 void shorttest_path_service(NeuHashtable* hashtable, AdjListGraph * graph, char *src, char *dest){
 
     __proccess_city_selection(hashtable, src, dest);
@@ -70,7 +92,8 @@ void shorttest_path_service(NeuHashtable* hashtable, AdjListGraph * graph, char 
     int prev[graph->numVertices];
     
     dijkstra(graph, get_item(hashtable, src)->vertextIndex, dist, prev);
-    
+
+    // debugger helpers
     if (debug_level >= DEBUG_INFO){
         printf("\nℹ️ Array in grpah:\n");
         print_array(graph);

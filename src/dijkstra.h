@@ -40,7 +40,12 @@ void printPath(int dest, int *prev, AdjListGraph *graph);
  */
 void printAllSolutions(int *dist, int *prev, AdjListGraph *graph) ;
 
-
+/**
+ * Prints a single solution for dijkstra's algorithm.
+ * @param dist Array containing shortest distances.
+ * @param prev Array containing previous nodes in the optimal path.
+ * @param V The number of vertices.
+ */
 void printTheShortestPath(char* src, char* dest, int *dist, int *prev, AdjListGraph *graph);
 
 #endif /* DIJKSTRA_H */

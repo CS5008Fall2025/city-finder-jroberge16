@@ -1,5 +1,7 @@
 /** 
- *  * Main Entry Point for City Finder Application
+ *  Main Entry Point for City Finder Application
+ * Author: Joshua Roberge
+ * semester Fall 2025
  */
 
  #include <stdbool.h>
@@ -19,5 +21,6 @@
  * @param argv arg lsit.
  */
 int main(int argc, char *argv[]) {
+    // call main program. We keep this simple here to make testing easier.
     return main_program(argc, argv);
 }

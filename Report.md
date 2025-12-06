@@ -108,8 +108,6 @@ For both these questions, are you are free to use what you did as the last secti
 
 
 Sources:
-
-
 [1] Dolci , C., & Salvini, D. (n.d.). Quadtrees. http://www.gitta.info/SpatPartitio/en/html/RegDecomp_learningObject3.html 
 
 [2] GeeksforGeeks. (2025, July 23). P, NP, CoNP, NP hard and NP complete: Complexity Classes. GeeksforGeeks. https://www.geeksforgeeks.org/dsa/types-of-complexity-classes-p-np-conp-np-hard-and-np-complete/ 

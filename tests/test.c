@@ -100,6 +100,23 @@ void run_tests(void){
     print_results(dist[5], 10, "distance from d to f");
     print_results(dist[4], 7, "distance from d to d");
 
+    printf("\n\n🧪 Testing Utility Items:");
+    char folder_path_edges[256] = "";
+    char folder_path_nodes[256] = "";
+    char *test_argv[] = {"map.out", "data/vertices.txt", "data/distances.txt", "2"};
+    process_command_line_args(4, test_argv, folder_path_edges, folder_path_nodes);
+    assert(strcmp(folder_path_nodes, "data/vertices.txt") == 0);
+    assert(strcmp(folder_path_edges, "data/distances.txt") == 0);
+    printf("\n\t ✅  command lines rags works\n");
+
+
+    // just a print statement
+    helper();
+    printf("\n\t ✅  print helper function working correctly\n");
+
+    printf("\n\n ℹ️ Items that required user input were manually tested. Code that was written\n");
+    printf(" by lionel was not directly tested although it was test by testing dystras which was tested. \n");
+
     printf("\n");
 
 
