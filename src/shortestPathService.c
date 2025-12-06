@@ -16,28 +16,6 @@
 #include "NeuHashtable.h"
 
 
-// /**
-//  * Check that city selection was valid
-//  * @param hashtable hashtable of proper name -> index.
-//  * @param src source proper name .
-//  * @param dest destination proper name
-//  * @return 0 is valid else 1
-//  */
-// int __check_city_selection(NeuHashtable* hashtable, char* src, char* dest ){
-//     // get index of proper name
-//     Item* srcitem = get_item(hashtable, src); 
-//     Item* destitem = get_item(hashtable, dest); 
-
-//     // if NULL bad names
-//     if(srcitem == NULL|| destitem == NULL){
-//         printf("\n\nInvalid city selection");
-//         return 1;
-//     } else {
-//         // good selection otherwise
-//         printf("good Selection");
-//         return 0;
-//     }
-// }
 
 /**
  * Check that city selection was valid
@@ -61,21 +39,6 @@ int __proccess_city_selection(NeuHashtable* hashtable, char* src, char* dest){
         return 0;
     }
 }
-
-// bool __continue_finding_menu(){
-//     char userchoice =  '\0';
-//     while(1){
-//         printf("\n🏢  Would you like to find find another shorter path? (y/n)\n");
-//         scanf(" %c", &userchoice);
-//         if(userchoice == 'y' || userchoice=='Y'){
-//             return 1;
-//         } else if (userchoice == 'n' || userchoice=='N'){
-//             return 0;
-//         } else {
-//             printf("❌ Invalid selection. Please select y or n");
-//         }
-//     }
-// }
 
 
 /**

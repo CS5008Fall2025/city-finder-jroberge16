@@ -7,7 +7,6 @@
 #include "debug.h"
 
 
-// void shortest_path_menu(char *folder_path_edges, char *folder_path_nodes);
 
 /**
  * Contains of the logic for presenting the dijkstra shortest path service to the user

@@ -24,7 +24,6 @@ void helper();
  */
 void process_command_line_args(int argc, char *argv[], char *folder_path_edges,char *folder_path_nodes);
 
-// void shortest_path_menu(char *folder_path_edges, char *folder_path_nodes);
 
 /**
  * Main entry point for the program.
